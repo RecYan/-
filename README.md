@@ -27,7 +27,22 @@ vm.max_map_count=2621441
 ```
 3. javaAPI创建索引及操作文档
 > 单机状态下，增删改查的简单操作<具体见代码，博客会后续补充>
-
+4. Head插件安装使用
+```
+1.head插件安装
+1.1 安装node.js
+1.2 安装git,克隆head插件 [yum install -y git]
+1.3 配置elasticsearch.yml,允许head插件访问 [http.cors.enabled: true http.cors.allow-origin: "*"]
+2.head插件添加和删除索引
+3.head插件添加、修改、删除文档
+3.1 PUT: 创建和修改数据
+3.2 POST: 创建和修改数据
+3.3 GET: 查询数据
+3.4 DELETE: 删除数据
+4.head插件打开和关闭文档
+5.head插件增加索引映射
+```
+[安装node.js](http://blog.java1234.com/blog/articles/354.html)
 
 
 
