@@ -1,7 +1,6 @@
 # ElasticSearch知识点及Demo #
 ---
 
-## es安装 ##
 1. 环境：centosOS-minimal、jdk1.8、vsftp、es 5.5.2  
 2. 安装配置es
 ```
@@ -79,9 +78,71 @@ vm.max_map_count=2621441
 # discovery.zen.ping.unicast.hosts: ["host1", "host2"] <集群配置时，配置一个主节点即可>
 **/
 ```
+
 6. es集群搭建及配置
+```
+配置集群之前  先把要加群集群的节点的里的data目录下的Node目录 删除，否则集群建立会失败。
+集群信息：两台机器IP分别是 192.168.80.100 和 192.168.80.101
 
-
+100机器：
+/**
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-1
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+network.host: 192.168.80.100
+#
+# Set a custom port for HTTP:
+#
+http.port: 9200
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+discovery.zen.ping.unicast.hosts: ["192.168.80.100"] <主节点>
+#
+**/
+101机器：
+/**
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-2 <节点名称需要区分>
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+network.host: 192.168.80.101
+#
+# Set a custom port for HTTP:
+#
+http.port: 9200
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+discovery.zen.ping.unicast.hosts: ["192.168.80.100"] <主节点>
+#
+**/
+```
+7. es查询API
+```
+1.查询所有数据
+2.分页查询
+3.排序
+4.数据列过滤
+5.简单条件查询
+6.查询条件高亮显示
+[代码中有详细注释]
+```
 
 
 
