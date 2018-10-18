@@ -1,7 +1,17 @@
 # ElasticSearch知识点及Demo #
----
 
+[环境](#1)
+[安装配置es](#2)
+[javaAPI创建索引及操作文档](#3)
+[Head插件安装使用](#4)
+[elasticsearch.yml配置文件](#5)
+[es集群搭建及配置](#6)
+[es查询API](#7)
+[项目中es实战](#8)
+---
+<a name="1"></a>
 1. 环境：centosOS-minimal、jdk1.8、vsftp、es 5.5.2  
+<a name="2"></a>
 2. 安装配置es
 ```
 高版本的ES，不能以root用户启动，需要创建一个普通用户来启动
@@ -24,8 +34,10 @@ vi elasticsearch-5.5.2/config/elasticsearch.yml
 vm.max_map_count=2621441
 刷新文件生效：sysctl -p
 ```
+<a name="3"></a>
 3. javaAPI创建索引及操作文档
 > 单机状态下，增删改查的简单操作<具体见代码，博客会后续补充>
+<a name="4"></a>
 4. Head插件安装使用
 ```
 1.head插件安装
@@ -44,7 +56,8 @@ vm.max_map_count=2621441
 ```
 [安装node.js](http://blog.java1234.com/blog/articles/354.html)
 
-5. elasticsearch.yml配置文件解读
+<a name="5"></a>
+5. elasticsearch.yml配置文件
 ```
 /**
 # Cluster
@@ -78,7 +91,7 @@ vm.max_map_count=2621441
 # discovery.zen.ping.unicast.hosts: ["host1", "host2"] <集群配置时，配置一个主节点即可>
 **/
 ```
-
+<a name="6"></a>
 6. es集群搭建及配置
 ```
 配置集群之前  先把要加群集群的节点的里的data目录下的Node目录 删除，否则集群建立会失败。
@@ -133,6 +146,7 @@ discovery.zen.ping.unicast.hosts: ["192.168.80.100"] <主节点>
 #
 **/
 ```
+<a name="7"></a>
 7. es查询API
 ```
 1.查询所有数据
@@ -143,6 +157,7 @@ discovery.zen.ping.unicast.hosts: ["192.168.80.100"] <主节点>
 6.查询条件高亮显示
 [代码中有详细注释]
 ```
+<a name="8"></a>
 7. 项目中es实战
 ```
 1.使用bulkAPI，完成了读取本都文件中的数据，建立对应索引，并批量写入到ES集群中
