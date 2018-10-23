@@ -1,13 +1,14 @@
 # ElasticSearch知识点及Demo #
 
-[环境](#1)  
-[安装配置es](#2)  
-[javaAPI创建索引及操作文档](#3)  
-[Head插件安装使用](#4)  
-[elasticsearch.yml配置文件](#5)  
-[es集群搭建及配置](#6)  
-[es查询API](#7)  
-[项目中es实战](#8)  
+
++ [环境](#1)  
++ [安装配置es](#2)  
++ [javaAPI创建索引及操作文档](#3)  
++ [Head插件安装使用](#4)  
++ [elasticsearch.yml配置文件](#5)  
++ [es集群搭建及配置](#6)  
++ [es查询API](#7)  
++ [项目中es实战](#8)  
 ---
 <a name="1"></a>
 1. 环境：centosOS-minimal、jdk1.8、vsftp、es 5.5.2  
