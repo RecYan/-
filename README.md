@@ -13,6 +13,8 @@
 
 
 + [**RabbitMQ**](#9)
+	+ [RabbitMQ核心概念](#9.1)
+
 
 + [**Redis**](#10)
 
@@ -177,8 +179,13 @@ discovery.zen.ping.unicast.hosts: ["192.168.80.100"] <主节点>
 [详见代码注释]
 ```
 
-
-
-
+---
+<a name="9"></a>
+## RabbitMQ ##
+<a name="9.1"></a>
+### RabbitMQ核心概念 ###
+1. RabbitMQ：基于**AMQP协议**的**跨平台**、**跨语言**的开源消息中间件
+2. AMQP: Advanced Message Queuing Protocol 二进制协议，面向应用层协议的一个开放标准、规范
+![AMQP](https://i.imgur.com/8xZPxl5.png)
 
 
