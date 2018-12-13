@@ -178,14 +178,30 @@ discovery.zen.ping.unicast.hosts: ["192.168.80.100"] <主节点>
 3.配合过滤条件，完成了集群数据的范围查询，并进行对应处理
 [详见代码注释]
 ```
+--------
 
----
+
 <a name="9"></a>
 ## RabbitMQ ##
 <a name="9.1"></a>
-### RabbitMQ核心概念 ###
+### RabbitMQ相关概念 ###
 1. RabbitMQ：基于**AMQP协议**的**跨平台**、**跨语言**的开源消息中间件
 2. AMQP: Advanced Message Queuing Protocol 二进制协议，面向应用层协议的一个开放标准、规范
 ![AMQP](https://i.imgur.com/8xZPxl5.png)
+
+``` java
+AMQP协议模型与概念
+1.Server: (Broker) 接受客户端连接 实现AMQP服务
+2.Connection: 应用程序与Broker的网络连接
+3.Channel: 网络信道 --> 数据交互的关键
+4.Message: [properties:消息属性设置<eg:消息优先级设置> + Body：消息实体]
+5.Virtual Host: 虚拟主机 用于逻辑隔离、服务划分
+6.Exchange: 交换机，接受消息，根据[路由键] 转发消息到绑定的消息队列
+7.Binding： Exchange和Queue之间的虚拟连接
+8.RoutingKey: 路由键 用于确定
+
+```
+
+
 
 
