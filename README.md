@@ -14,6 +14,9 @@
 
 + [**RabbitMQ**](#9)
 	+ [RabbitMQ核心概念](#9.1)
+	+ [AMQP协议模型与概念](#9.2)
+	+ [RabbitMQ安装](#9.3)
+	+ [RabbitMQ 生产者-消费者Demo](#9.4)
 
 
 + [**Redis**](#10)
@@ -189,8 +192,9 @@ discovery.zen.ping.unicast.hosts: ["192.168.80.100"] <主节点>
 2. AMQP: Advanced Message Queuing Protocol 二进制协议，面向应用层协议的一个开放标准、规范
 ![AMQP](https://i.imgur.com/8xZPxl5.png)
 
+<a name="9.2"></a>
+### AMQP协议模型与概念 ###
 ``` java
-AMQP协议模型与概念
 1.Server: (Broker) 接受客户端连接 实现AMQP服务
 2.Connection: 应用程序与Broker的网络连接
 3.Channel: 网络信道 --> 数据交互的关键
@@ -198,9 +202,38 @@ AMQP协议模型与概念
 5.Virtual Host: 虚拟主机 用于逻辑隔离、服务划分
 6.Exchange: 交换机，接受消息，根据[路由键] 转发消息到绑定的消息队列
 7.Binding： Exchange和Queue之间的虚拟连接
-8.RoutingKey: 路由键 用于确定
-
+8.RoutingKey: 路由键 用于确定路由特定的信息
+9.Queue: 消息队列 保存消息并转发给消费者
 ```
+**MQ架构 --> 解耦特性**
+![MQ架构](https://i.imgur.com/GGqefIl.jpg)
+**MQ消息流转示意图**
+![MQ消息流转](https://i.imgur.com/2IvVg1b.jpg)
+
+<a name="9.3"></a>
+### RabbitMQ安装 ###
+``` java
+下载：
+ErLang --> socat秘钥依赖 --> rabbitmq
+wget www.rabbitmq.com/releases/erlang/erlang-18.3-1.el7.centos.x86_64.rpm
+wget http://repo.iotti.biz/CentOS/7/x86_64/socat-1.7.3.2-5.el7.lux.x86_64.rpm
+wget www.rabbitmq.com/releases/rabbitmq-server/v3.6.5/rabbitmq-server-3.6.5-1.noarch.rpm
+
+配置文件：
+vim /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.5/ebin/rabbit.app
+修改密码：loopback_users 中的 <<"guest">>,只保留guest
+
+服务启动和停止：
+启动 rabbitmq-server start &
+停止 rabbitmqctl app_stop
+
+管理插件(管控台)：rabbitmq-plugins enable rabbitmq_management
+访问地址：http://192.168.80.100:15672/
+```
+
+<a name="9.4"></a>
+### RabbitMQDemo ###
+*代码中有详细注释：Producer.java Consumer.java*
 
 
 
