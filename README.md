@@ -17,6 +17,8 @@
 	+ [AMQP协议模型与概念](#9.2)
 	+ [RabbitMQ安装](#9.3)
 	+ [RabbitMQ 生产者-消费者Demo](#9.4)
+	+ [Rabbit Exchange详解](#9.5)
+	+ [RabbitMQ高级特性](#9.6)
 
 
 + [**Redis**](#10)
@@ -234,6 +236,36 @@ vim /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.5/ebin/rabbit.app
 <a name="9.4"></a>
 ### RabbitMQDemo ###
 *代码中有详细注释：Producer.java Consumer.java*
+
+
+<a name="9.5"></a>
+### Rabbit Exchange详解 ###
+
+``` java
+1.根据路由键将消息路由到对应的队列中
+2.主要属性：
+		  AutoDelete: 绑定到该excahnge的Queue删除后，自动删除该队列
+		  internal: 是否用于RabbitMQ内部使用
+		  Arguments: 设置交换机的扩展参数，eg: x-dead-excahnge DLX死信队列
+3.主要类型：
+		  DirectExchange: 所有消息路由到routingKey对应的queue中 [exchange和queue的 routingKey 要保持一致]
+		  TopicExchange: 所有消息路由到可以和routingKey模糊匹配的queue中
+						 其中：*匹配单个，#匹配多个
+		  FanoutExchange: 不处理任何路由键，直接将消息路由到与exchange绑定的queue上 [性能最高]	
+```
+*几种exchange类型示意图*
+![DirectExchange](https://i.imgur.com/0If8urg.jpg)
+![TopicExchange](https://i.imgur.com/x2xYWFW.jpg)
+![FanoutExchange](https://i.imgur.com/bKiU3F1.jpg)
+
+
+<a name="9.6"></a>
+### RabbitMQ高级特性 ###
+
+
+
+
+
 
 
 
