@@ -262,9 +262,21 @@ vim /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.5/ebin/rabbit.app
 <a name="9.6"></a>
 ### RabbitMQ高级特性 ###
 
-
-
-
+1.消息的可靠性投递
+``` java
+生产端可靠性投递要求：
+				  1.生产端成功发出消息
+				  2.MQ节点成功收到该消息
+				  3.生产端成功收到MQ的ACK
+				  4.错误消息补偿机制
+解决方案：
+		1.消息落库，对消息状态打标  [见图片注释]
+		2.延迟投递消息，做二次检查，二次ACK  [见图片注释]
+```
+**消息落库**
+![消息落库](https://i.imgur.com/PQecwN3.jpg)
+**延迟投递消息**
+![延迟投递消息](https://i.imgur.com/aH3ahG9.jpg)
 
 
 
