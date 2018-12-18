@@ -278,6 +278,83 @@ vim /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.5/ebin/rabbit.app
 **延迟投递消息**
 ![延迟投递消息](https://i.imgur.com/aH3ahG9.jpg)
 
+2.幂等性：
+``` java
+避免消费端重复消费消息
+实现：
+	1.唯一ID + 指纹码 --> 数据库主键去重
+    2.利用Redis原子性实现
+
+```
+3.Confirm消息确认机制
+``` java
+主要步骤：
+	   1. channel开启确认模式 channel.confirmSelect()
+	   2. channel添加监听 channel.addconfirmListener()
+
+```
+**Confirm消息确认机制**
+![Confirm消息确认机制](https://i.imgur.com/EqeXsyN.jpg)
+
+4.Return消息机制： 处理路由不可达的消息
+``` java
+主要设置：
+		Mandatory: true时 监听不可达消息 并requeue
+
+```
+**Return消息机制**
+![Return消息机制](https://i.imgur.com/47swTeq.jpg)
+
+5.自定义消费端监听：
+``` java
+1. 继承DefaultConsumer
+2. 复写handleDelivery()
+public class MyConsumer extends DefaultConsumer {
+
+	public MyConsumer(Channel channel) {
+		super(channel);
+	}
+	
+	// @param deliveryTag the delivery tag -- enevlope.getdeliveryTag() --> 消息唯一ID标签
+	@Override
+	public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+		System.err.println("-----------consume message----------");
+		System.err.println("consumerTag: " + consumerTag);
+		System.err.println("envelope: " + envelope);
+		System.err.println("properties: " + properties);
+		System.err.println("body: " + new String(body));
+	}
+
+}
+
+```
+6. **消费端限流**
+
+``` java
+重要： basicConsume需要取消自动ACK
+/**
+	 @param prefetchSize maximum amount of content (measured in
+     * octets) that the server will deliver, 0 if unlimited
+     * @param prefetchCount maximum number of messages that the server
+     * will deliver, 0 if unlimited
+     * @param global true if the settings should be applied to the
+     * entire channel rather than each consumer
+*/
+ channel.basicQos(int prefetchSize, int prefetchCount, boolean global) --consumer
+ channel.basicAck(envelope.getDeliveryTag(), false) --自定义consummer
+```
+7.消费端ACK与重回队列
+8.消息TTL（Time To Live）
+9.死信队列[Dead-Letter-Exchange] DLX
+``` java
+当消息在一个队列中变成死信之后，它将被DLX重新publish到另一个exchange中 然后路由到与该exchang绑定的队列中
+//见Dlx代码注释
+触发死信条件：
+		   1. 消息被拒绝[basic.reject() basic.nack()] 且 requeue = false
+		   2. 消息TTL过期
+		   3. 队列长度被占满
+
+```
 
 
 
