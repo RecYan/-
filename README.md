@@ -343,8 +343,8 @@ public class MyConsumer extends DefaultConsumer {
  channel.basicQos(int prefetchSize, int prefetchCount, boolean global) --consumer
  channel.basicAck(envelope.getDeliveryTag(), false) --自定义consummer
 ```
-7.消费端ACK与重回队列
-8.消息TTL（Time To Live）
+7.消费端ACK与重回队列  
+8.消息TTL（Time To Live）  
 9.死信队列[Dead-Letter-Exchange] DLX
 ``` java
 当消息在一个队列中变成死信之后，它将被DLX重新publish到另一个exchange中 然后路由到与该exchang绑定的队列中
