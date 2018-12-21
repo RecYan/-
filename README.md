@@ -19,6 +19,7 @@
 	+ [RabbitMQ 生产者-消费者Demo](#9.4)
 	+ [Rabbit Exchange详解](#9.5)
 	+ [RabbitMQ高级特性](#9.6)
+	+ [RabbitMQ 与 SpringAMQP整合](#9.7)
 
 
 + [**Redis**](#10)
@@ -353,6 +354,21 @@ public class MyConsumer extends DefaultConsumer {
 		   1. 消息被拒绝[basic.reject() basic.nack()] 且 requeue = false
 		   2. 消息TTL过期
 		   3. 队列长度被占满
+
+```
+
+<a name="9.7"></a>
+### RabbitMQ 与 SpringAMQP整合 ###
+
+``` java
+1.SpringAMQP用户管理组件 --RabbitAdmin
+
+2.SpringAMQP消息模板组件 -- RabbitTemplate--[适配器模式、]
+
+3.SpringAMQP消息容器 - 适配器 - 转化器  -- SimpleMessageListenerContain--MessageAdapter--'XXX'MessageConvert
+注意 三者的嵌套关系
+
+详细说明 见代码-->Spring包
 
 ```
 
