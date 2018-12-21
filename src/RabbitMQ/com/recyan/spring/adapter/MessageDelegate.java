@@ -1,5 +1,8 @@
 package com.reyan.spring.adapter;
 
+import com.reyan.spring.entity.Order;
+import com.reyan.spring.entity.Packaged;
+
 import java.io.File;
 import java.util.Map;
 
@@ -34,7 +37,7 @@ public class MessageDelegate {
 	}
 	
 	
-	/*public void consumeMessage(Order order) {
+	public void consumeMessage(Order order) {
 		System.err.println("order对象, 消息内容, id: " + order.getId() + 
 				", name: " + order.getName() + 
 				", content: "+ order.getContent());
@@ -48,5 +51,5 @@ public class MessageDelegate {
 	
 	public void consumeMessage(File file) {
 		System.err.println("文件对象 方法, 消息内容:" + file.getName());
-	}*/
+	}
 }
