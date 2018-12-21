@@ -1,22 +1,22 @@
 package com.reyan.spring;
 
-import com.rabbitmq.client.Channel;
 import com.reyan.spring.adapter.MessageDelegate;
+import com.reyan.spring.convert.ImageMessageConverter;
+import com.reyan.spring.convert.PDFMessageConverter;
 import com.reyan.spring.convert.TextMessageConverter;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import org.springframework.amqp.support.ConsumerTagStrategy;
+import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 @Configuration
@@ -112,6 +112,7 @@ public class RabbitMQConfig {
         return rabbitTemplate;
     }
 
+    // 监听容器 -- 适配器 -- 转换器
     @Bean
     public SimpleMessageListenerContainer messageContainer(ConnectionFactory connectionFactory) {
 
@@ -144,14 +145,90 @@ public class RabbitMQConfig {
         /** 2 适配器方式: 我们的队列名称 和 方法名称 也可以进行一一的匹配
          *
          */
-        MessageListenerAdapter adapter = new MessageListenerAdapter(new MessageDelegate());
+        /*MessageListenerAdapter adapter = new MessageListenerAdapter(new MessageDelegate());
         HashMap<String, String> queueOrTagToMethodName = new HashMap<>();
         queueOrTagToMethodName.put("queue001", "method1"); //队列名称 和 方法名称 进行绑定匹配
         queueOrTagToMethodName.put("queue002", "method2");
         adapter.setQueueOrTagToMethodName(queueOrTagToMethodName);
         adapter.setMessageConverter(new TextMessageConverter()); //接受参数为String类型的形参 进行消息监听
-        container.setMessageListener(adapter); //用适配器 去监听队列
+        container.setMessageListener(adapter); //用适配器 去监听队列*/
 
+
+
+        // 1.1 支持json格式的转换器
+        /**
+         MessageListenerAdapter adapter = new MessageListenerAdapter(new MessageDelegate());
+         adapter.setDefaultListenerMethod("consumeMessage");
+
+         Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+         adapter.setMessageConverter(jackson2JsonMessageConverter);
+
+         container.setMessageListener(adapter);
+         */
+
+
+
+        // 1.2 DefaultJackson2JavaTypeMapper & Jackson2JsonMessageConverter 支持java对象转换
+        /**
+         MessageListenerAdapter adapter = new MessageListenerAdapter(new MessageDelegate());
+         adapter.setDefaultListenerMethod("consumeMessage");
+
+         Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+
+         DefaultJackson2JavaTypeMapper javaTypeMapper = new DefaultJackson2JavaTypeMapper();
+         jackson2JsonMessageConverter.setJavaTypeMapper(javaTypeMapper);
+
+         adapter.setMessageConverter(jackson2JsonMessageConverter);
+         container.setMessageListener(adapter);
+         */
+
+
+        //1.3 DefaultJackson2JavaTypeMapper & Jackson2JsonMessageConverter 支持java对象多映射转换
+        /**
+         MessageListenerAdapter adapter = new MessageListenerAdapter(new MessageDelegate());
+         adapter.setDefaultListenerMethod("consumeMessage");
+         Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+         DefaultJackson2JavaTypeMapper javaTypeMapper = new DefaultJackson2JavaTypeMapper();
+
+         Map<String, Class<?>> idClassMapping = new HashMap<String, Class<?>>();
+         idClassMapping.put("order", com.recyan.spring.entity.Order.class); //order 为order对象的标签
+         idClassMapping.put("packaged", com.recyan.spring.entity.Packaged.class);
+
+         javaTypeMapper.setIdClassMapping(idClassMapping);
+
+         jackson2JsonMessageConverter.setJavaTypeMapper(javaTypeMapper);
+         adapter.setMessageConverter(jackson2JsonMessageConverter);
+         container.setMessageListener(adapter);
+         */
+
+        //1.4 ext convert
+
+        MessageListenerAdapter adapter = new MessageListenerAdapter(new MessageDelegate());
+        adapter.setDefaultListenerMethod("consumeMessage");
+
+        //全局的转换器:
+        ContentTypeDelegatingMessageConverter convert = new ContentTypeDelegatingMessageConverter();
+
+        TextMessageConverter textConvert = new TextMessageConverter();
+        convert.addDelegate("text", textConvert);
+        convert.addDelegate("html/text", textConvert);
+        convert.addDelegate("xml/text", textConvert);
+        convert.addDelegate("text/plain", textConvert);
+
+        Jackson2JsonMessageConverter jsonConvert = new Jackson2JsonMessageConverter();
+        convert.addDelegate("json", jsonConvert);
+        convert.addDelegate("application/json", jsonConvert);
+
+        ImageMessageConverter imageConverter = new ImageMessageConverter();
+        convert.addDelegate("image/png", imageConverter);
+        convert.addDelegate("image", imageConverter);
+
+        PDFMessageConverter pdfConverter = new PDFMessageConverter();
+        convert.addDelegate("application/pdf", pdfConverter);
+
+
+        adapter.setMessageConverter(convert);
+        container.setMessageListener(adapter);
 
 
         return container;
