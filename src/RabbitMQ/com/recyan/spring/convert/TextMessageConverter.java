@@ -7,28 +7,14 @@ import org.springframework.amqp.support.converter.MessageConverter;
 
 public class TextMessageConverter implements MessageConverter {
 
-	/**
-	 * java类型 --> message
-	 * @param object
-	 * @param messageProperties
-	 * @return
-	 * @throws MessageConversionException
-     */
 	@Override
 	public Message toMessage(Object object, MessageProperties messageProperties) throws MessageConversionException {
 		return new Message(object.toString().getBytes(), messageProperties);
 	}
 
-	/**
-	 *  message --> java类型
-	 * @param message
-	 * @return
-	 * @throws MessageConversionException
-     */
 	@Override
 	public Object fromMessage(Message message) throws MessageConversionException {
 		String contentType = message.getMessageProperties().getContentType();
-		//根据contentType类型判断
 		if(null != contentType && contentType.contains("text")) {
 			return new String(message.getBody());
 		}
