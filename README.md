@@ -20,6 +20,7 @@
 	+ [Rabbit Exchange详解](#9.5)
 	+ [RabbitMQ高级特性](#9.6)
 	+ [RabbitMQ 与 SpringAMQP整合](#9.7)
+	+ [RabbitMQ 与 SpringBoot整合](#9.8)
 
 
 + [**Redis**](#10)
@@ -371,6 +372,34 @@ public class MyConsumer extends DefaultConsumer {
 详细说明 见代码-->Spring包
 
 ```
+<a name="9.8"></a>
+### RabbitMQ 与 SpringBoot整合 ###
+
+``` java
+
+1.消息生产端：
+			开启消息的确认[需要设置消息的全局唯一id:CorrelationData]和返回模式
+			开启消息手动签收模式
+
+2.消息消费端：
+			开启消息手动签收模式
+			设置监听queue个数
+3.[消费端一系列注解使用]：
+@RabbitListener(bindings = @QueueBinding(
+			value = @Queue(value = "queue-1", 
+			durable="true"),
+			exchange = @Exchange(value = "exchange-1", 
+			durable="true", 
+			type= "topic", 
+			ignoreDeclarationExceptions = "true"),
+			key = "springboot.*"
+			)
+	)  
+@Payload  
+@Headers  
+详细说明 见代码-->SpringBootProvider包、SpringBootConsumer包  
+```
+
 
 
 
