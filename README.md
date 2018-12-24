@@ -24,6 +24,7 @@
 
 
 + [**Redis**](#10)
+	+ [Redis五种数据结构API](#10.1)
 
 + [**ZooKeeper**](#11)
 ---
@@ -399,6 +400,88 @@ public class MyConsumer extends DefaultConsumer {
 @Headers  
 详细说明 见代码-->SpringBootProvider包、SpringBootConsumer包  
 ```
+
+
+
+
+----------
+<a name="10"></a>
+## Redis ##
+
+<a name="10.1"></a>
+### Redis五种数据结构 ###
+1.String结构
+``` java
+String的value的大小限制为512M
+使用场景：缓存、分布式锁、计数器
+API:
+get key
+set key vale
+del key
+
+incr key: key自增1 若key不存在 则自增后get(key)=1
+desc key: key自减1 若key不存在 则自增后get(key)=-1
+incr key k: key自增k
+desc key k
+
+set key value：不管key是否存在 都设置
+setnx key value: key不存在是 才设置  --add操作[nx: not exits]
+set key value xx: key存在 才设置 --update操作
+setex key seconds value: 值 value 关联到 key ，并将 key 的生存时间设为 seconds (以秒为单位) --分布式锁
+
+m:批量操作
+mget key1 key2...    耗时分析：一次网络时间+m次命令时间<时间短> 节约时间
+mset key1 value1 key2 value2...
+
+getset key newValue: get在setnewvalue
+append key value: 追加元素
+slen key
+getrange key start end：获取start到end下标对应的value
+settrange key index value：设置指定下标对应的值
+```
+2.hash结构
+``` java
+K-V结构：k V[field(不可重复) value] --类似mapMap结构或数据库表结构<k-数据表表名，v-数据表内容>
+API：
+hget key field: 获取field对应的value
+hset key field
+hdel key field
+
+hexists key field: 判断key是否有field
+hlen key: 获取key对应的field数量
+
+hmget key field1 field2 ...
+hmset key field1 value1 field2 value2...
+
+//小心使用遍历redis的命令 --redis是单线程的 可能会造成堵塞
+hgetall key: 获取key对应的所有filed-value对
+hvals key: 获取key对应的所有field对应的value
+hkeys key: 获取说有key对应的field
+
+hsetnx key field value
+hincrby key field intCounter
+
+```
+3.list结构
+``` java
+k-v结构：k v[有序可重复队列结构]
+index方向：从左向右从0开始， 从右向左-1开始
+API:
+//增
+rpush key value1 vaule2 ...: 列表右边插入
+lpush key value1 vaule2 ...: 列表左边插入
+linsert key before|after value newValue: 在指定值的前|后插入newValue
+//删
+lpop key：左侧弹出一个value
+rpop key：
+lrem key count value: 根据count值 从列表中删除所有与value相等的项
+/*
+count>0 从左向右删除count个与value相等的项
+count<0 从右向左删除Math.abs(count)个与value相等的项
+count=0 删除所有的
+*/
+```
+
 
 
 
