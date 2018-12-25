@@ -407,7 +407,7 @@ public class MyConsumer extends DefaultConsumer {
 ----------
 <a name="10"></a>
 ## Redis ##
-
+*使用内存存储的单线程NoSQL*
 <a name="10.1"></a>
 ### Redis五种数据结构 ###
 1.String结构
@@ -480,9 +480,64 @@ count>0 从左向右删除count个与value相等的项
 count<0 从右向左删除Math.abs(count)个与value相等的项
 count=0 删除所有的
 */
+ltrim key satrt end 
+//查
+lrange key satrt end
+lindex key index:获取列表中index位置的元素
+llen key: --redis内部计算 时间复杂度O(1)
+//改
+lset key index newValue
+
+//阻塞操作
+blpop key timeout
+brpop key timeout
+
+//tips
+lpush + lpop = stack
+lpush + rpop = queue
+lpush + ltrim = capped collection --大小固定的列表 超过固定大小后 新值会覆盖旧值
+lpush + brpop = message queue
 ```
+4.set结构
+``` java
+k-v结构：k, v[item1,item2...无序 不可重复]
+//集合间API:
+sadd key element
+srem key element
+sacrd key: 计算集合的大小‘
+sismember key value=xxx: 判断xxx是否在集合中
+spop Key: 集合中随机弹出一个元素，会破坏集合结构
+srandmember key: 获取集合中随机个数元素，不会破坏集合结构
+smembers key:获取集合中所有的元素 --遍历操作需要谨慎使用，推荐使用scan
+//集合内API:
+sdiff key1 key2: 差集
+sinter key1 key2: 交集
+sunion key1 key2: 并集
 
+tips:
+sadd = Tagging
+spop/srandmember = random item
+sadd + sinter = social graph
+```
+5.zset(sorted set)结构
+``` java
+k-v结构：k, v[score value] --有序不可重复集合
+API:
+zadd key score element(不可重复)
+zrem key element
+zscore key element: 返回对应元素的分数
+zincrby key increScore element: 对应元素分数 增加或减少Math.abs(socre)
+zcard key: 返回element个数
+zrange key start end [withscore]: 返回索引范围内的升序元素[是否带上分数显示]
+zrangebyscore key minScore maxScore
+zcount key minScore maxScore: 返回指定分数范围内的个数
+zremrangebyrank key start end: 删除指定排名内的升序元素
+zremrangebyscore key minScore maxScore: 
 
+集合间API
+zunionstore key1 key2
+zinterstore key1 key2
+```
 
 
 
