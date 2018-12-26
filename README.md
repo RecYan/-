@@ -364,7 +364,7 @@ public class MyConsumer extends DefaultConsumer {
 ### RabbitMQ 与 SpringAMQP整合 ###
 
 ``` java
-1.SpringAMQP用户管理组件 --RabbitAdmin
+1.SpringAMQP用户管理组件 --RabbitAdmin:底层从Spring容器中 获取 exchange、queue、routingKey，内部调用rabbitTempalte的execute()方法
 
 2.SpringAMQP消息模板组件 -- RabbitTemplate--[适配器模式、]
 
