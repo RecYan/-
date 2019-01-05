@@ -543,8 +543,8 @@ zinterstore key1 key2
 <a name="10.2"></a>
 ### Redis其他功能 ###
 1.慢查询
-*Redis会把命令执行时间超过 slowlog-log-slower-than 的都记录在 Reids 内部的一个列表（list）中，该列表的长度最大为 slowlog-max-len*
-**慢查询生命周期**
+*Redis会把命令执行时间超过 slowlog-log-slower-than 的都记录在 Reids 内部的一个列表（list）中，该列表的长度最大为 slowlog-max-len*  
+**慢查询生命周期**  
 ![慢查询生命周期](https://i.imgur.com/8R3Wymf.jpg)
 ``` java
 慢查询配置
@@ -555,7 +555,7 @@ slowlog get[n]
 slowlog len
 slowlog reset: 清空慢查询队列
 ```
-2.pipeline:流水线功能
+2.pipeline:流水线功能  
 ![pipeline](https://i.imgur.com/Zo7OINM.jpg)
 ``` java
 
@@ -575,7 +575,7 @@ for(int i=0; i<100; i++) {
 原生M命令[mget\mset]是原子的
 pipeline 则会将大批量命令 拆分成小批量命令 非原子的 需要加锁
 ```
-3.发布/订阅模式
+3.发布/订阅模式  
 ``` java
 发布/订阅：发布者发布消息到channel上，所欲监听该channel的订阅者 都会接收到该消息
 消息队列： 所有对channel监听的订阅者 对channel的消息 会有竞争机制 不会每个订阅者都接收到消息
@@ -585,7 +585,7 @@ publish channel message
 subscribe [channel]
 unsubscribe [channel]
 ```
-4.BitMap：位图 对value中的字节位 进行操作 可用于独立用户的统计
+4.BitMap：位图 对value中的字节位 进行操作 可用于独立用户的统计  
 ![BitMap](https://i.imgur.com/0GlxYbu.jpg)
 
 
